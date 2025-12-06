@@ -13,11 +13,14 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Run unit tests
+        env:
+          JUST_VAR: ${{ vars.MY_REPO_VAR }}
         run: |
           echo "Starting tests..."
           sleep 2
           mkdir build
           echo "This is the compiled binary code." > build/app.txt
+          echo "Also used the variable: 'JUST_VAR':= $JUST_VAR"
 
       - name: Upload Artifact
         uses: actions/upload-artifact@v4
@@ -39,3 +42,10 @@ jobs:
           echo "Deploying application to production..."
           ls -l app.txt
           cat app.txt
+
+      - name: Simulate Login
+        env:
+          API_KEY: ${{ secrets.MY_API_KEY }}
+        run: |
+          echo "Connecting to server..."
+          echo "Using Key: $API_KEY"
