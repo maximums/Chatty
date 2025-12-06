@@ -16,11 +16,26 @@ jobs:
         run: |
           echo "Starting tests..."
           sleep 2
-          echo "Tests passed!"
+          mkdir build
+          echo "This is the compiled binary code." > build/app.txt
+
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: my-app-binary
+          path: build/app.txt
 
   deploy:
     needs: tests
     runs-on: ubuntu-latest
     steps:
+      - name: Download Artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: my-app-binary
+
       - name: Deploy to Server
-        run: echo "Deploying application to production..."
+        run: |
+          echo "Deploying application to production..."
+          ls -l app.txt
+          cat app.txt
